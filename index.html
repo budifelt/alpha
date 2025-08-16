@@ -106,17 +106,35 @@
     .filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 12px; }
     .filter { padding:8px 12px; border:1px solid var(--border); border-radius: 12px; background: var(--card); cursor:pointer; }
     .filter.active { background: var(--primary); color: white; border-color: color-mix(in oklab, var(--primary) 60%, var(--border)); }
-    .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
+
+    .projects-wrapper { position: relative; margin-top: 6px; }
+    .grid { flex:1; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
     @media (max-width: 1000px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
-    .project { position:relative; overflow:hidden; border-radius:16px; border:1px solid var(--border); background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 10%, var(--card)), var(--card)); box-shadow: var(--shadow); }
-    .project .thumb { aspect-ratio: 16/9; display:flex; align-items:center; justify-content:center; font-weight:700; color: var(--text-soft); background: var(--muted); }
+
+    .project { $1 cursor:pointer; }
+    .project:hover{ transform: translateY(-2px); transition: transform .15s ease; }
+    .project .thumb { position:relative; aspect-ratio:9/9; background:var(--muted); border-bottom:1px solid var(--border); overflow:hidden; cursor:pointer; }
+    .project .thumb .thumb-frame{ position:absolute; inset:0; width:100%; height:100%; border:0; pointer-events:none; }
+    .project .thumb .thumb-fallback{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--text-soft); padding:10px; text-align:center; }
+    .project .thumb::after{ content:''; position:absolute; inset:auto 0 0 0; height:44px; background:linear-gradient(to top, rgba(0,0,0,.24), transparent); pointer-events:none; }
     .project .content { padding:14px; }
     .project .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top: 8px; }
 
-    /* Project small buttons */
-    .btn.sm { padding:6px 10px; border-radius:10px; font-size:.9rem; }
-    .project .actions { display:flex; gap:8px; margin-top:10px; }
+    /*/* Slider Arrows overlay di kiri/kanan grid */
+    .slider-arrow {
+      position:absolute; top:50%; transform: translateY(-50%);
+      display:inline-flex; align-items:center; justify-content:center;
+      width:44px; height:44px; border-radius:999px; border:1px solid var(--border);
+      background: color-mix(in oklab, var(--card) 90%, transparent);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px) saturate(120%);
+      cursor:pointer; z-index:5;
+    }
+    .slider-arrow.left { left:-8px; }
+    .slider-arrow.right { right:-8px; }
+    .slider-arrow:disabled { opacity:.45; cursor:not-allowed; }
+    @media (max-width: 640px){ .slider-arrow{ width:38px; height:38px; } }
 
     /* Preview Modal */
     #previewModal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,.6); z-index:100; padding:20px; }
@@ -137,7 +155,7 @@
 
     /* Print (untuk PDF) */
     @media print {
-      header.nav, .hero-actions .btn:not(.print), .filters, .contact-grid, .project .thumb { display:none !important; }
+      header.nav, .hero-actions .btn:not(.print), .filters, .pager, .contact-grid, .project .thumb { display:none !important; }
       .card, .project { box-shadow: none; }
       body { background: white; }
       .container { width: 100%; }
@@ -184,7 +202,7 @@
             </div>
           </div>
         </div>
-        <p>Digital Support & Web Designer focused on EDM: blasting, HTML email layout, image editing, and creating digital assets for campaigns. Experienced at HSBC and cross‑team collaboration; ensures consistent rendering (Outlook, Gmail, mobile) and on‑time execution.</p>
+        <p>Digital Support & Web Designer focused on EDM: blasting, HTML email layout, image editing, and creating digital assets for campaigns. Experienced at HSBC and cross-team collaboration; ensures consistent rendering (Outlook, Gmail, mobile) and on-time execution.</p>
         <div class="hero-actions">
           <button class="btn" id="copyEmail">📋 Copy Email</button>
           <a class="btn" href="mailto:emailmu@domain.com">✉️ Email</a>
@@ -232,15 +250,15 @@
         <div class="item">
           <div class="when">Jan 2018 – Jan 2020</div>
           <div>
-            <div class="where">HSBC Retail Banking and Wealth Management — Web Designer (Contract) · Greater Jakarta · On‑site</div>
-            <p>Digital Team Marketing: managed daily email blasts; designed and converted offers into HTML for emails; produced social media/WhatsApp/Instagram/sign‑off/PIB/ATM banners; image manipulation & retouching; executed SMS blasts.</p>
+            <div class="where">HSBC Retail Banking and Wealth Management — Web Designer (Contract) · Greater Jakarta · On-site</div>
+            <p>Digital Team Marketing: managed daily email blasts; designed and converted offers into HTML for emails; produced social media/WhatsApp/Instagram/sign-off/PIB/ATM banners; image manipulation & retouching; executed SMS blasts.</p>
           </div>
         </div>
         <div class="item">
           <div class="when">Jan 2019 – Oct 2019</div>
           <div>
-            <div class="where">INDEGLAY — Graphic Designer (Part‑time) · Jakarta Metropolitan Area</div>
-            <p>Developed design concepts for social/web/email; created banners & icons; retouched images; collaborated and presented concepts to partners; stayed current with design trends; ensured on‑time delivery.</p>
+            <div class="where">INDEGLAY — Graphic Designer (Part-time) · Jakarta Metropolitan Area</div>
+            <p>Developed design concepts for social/web/email; created banners & icons; retouched images; collaborated and presented concepts to partners; stayed current with design trends; ensured on-time delivery.</p>
           </div>
         </div>
       </div>
@@ -257,36 +275,53 @@
           <button class="filter" data-filter="data">Data</button>
         </div>
       </div>
-      <div class="grid" id="projects">
-        <article class="project" data-tags="web" data-url="https://budifelt.github.io/beta/">
-          <div class="thumb">Project Beta — budifelt.github.io/beta</div>
-          <div class="content">
-            <h3>Project Beta</h3>
-            <p>EDM helper tools & small utilities.</p>
-            <div class="tags"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JS</span><span class="badge">GitHub Pages</span></div>
-            <div class="actions">
-              <button class="btn sm preview-btn" data-preview-url="https://budifelt.github.io/beta/">🔎 Preview</button>
-              <a class="btn sm" href="https://budifelt.github.io/beta/" target="_blank" rel="noopener">↗ Open</a>
+
+      <div class="projects-wrapper">
+        <div class="grid" id="projects">
+          <article class="project" data-tags="web" data-url="https://budifelt.github.io/beta/">
+            <div class="thumb" data-preview-url="https://budifelt.github.io/beta/" data-autopreview="true">
+              <iframe class="thumb-frame" src="https://budifelt.github.io/beta/" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+              <div class="thumb-fallback">Project Beta — budifelt.github.io/beta</div>
             </div>
-          </div>
-        </article>
-        <article class="project" data-tags="design">
-          <div class="thumb">Thumbnail</div>
-          <div class="content">
-            <h3>Design System v2</h3>
-            <p>Consistent components for web & EDM; reduced rework by 35%.</p>
-            <div class="tags"><span class="badge">Figma</span><span class="badge">Design Token</span></div>
-          </div>
-        </article>
-        <article class="project" data-tags="data">
-          <div class="thumb">Thumbnail</div>
-          <div class="content">
-            <h3>Dashboard Email Campaign</h3>
-            <p>Open/click tracking; automated weekly reporting.
-            </p>
-            <div class="tags"><span class="badge">SQL</span><span class="badge">Power BI</span></div>
-          </div>
-        </article>
+            <div class="content">
+              <h3>Project Beta</h3>
+              <p>EDM helper tools & small utilities.</p>
+              <div class="tags"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JS</span><span class="badge">GitHub Pages</span></div>
+            </div>
+          </article>
+          <article class="project" data-tags="design">
+            <div class="thumb">Thumbnail</div>
+            <div class="content">
+              <h3>Design System v2</h3>
+              <p>Consistent components for web & EDM; reduced rework by 35%.</p>
+              <div class="tags"><span class="badge">Figma</span><span class="badge">Design Token</span></div>
+            </div>
+          </article>
+          <article class="project" data-tags="data">
+            <div class="thumb">Thumbnail</div>
+            <div class="content">
+              <h3>Dashboard Email Campaign</h3>
+              <p>Open/click tracking; automated weekly reporting.</p>
+              <div class="tags"><span class="badge">SQL</span><span class="badge">Power BI</span></div>
+            </div>
+          </article>
+          <!-- Tambah 1 untuk test slider -->
+          <article class="project" data-tags="web">
+            <div class="thumb">Thumbnail</div>
+            <div class="content">
+              <h3>Landing Page A/B</h3>
+              <p>Experiment layout for CTR uplift.</p>
+              <div class="tags"><span class="badge">HTML</span><span class="badge">A/B Test</span></div>
+            </div>
+          </article>
+        </div>
+        <button class="slider-arrow left" id="arrowLeft" aria-label="Previous">◀</button>
+        <button class="slider-arrow right" id="arrowRight" aria-label="Next">▶</button>
+      </div>
+      </div>
+
+      <div id="emptyState" style="display:none; padding:10px; color:var(--text-soft);">
+        No projects for this tag.
       </div>
     </section>
 
@@ -362,7 +397,7 @@
 
     // ===== Copy email =====
     const EMAIL = 'emailmu@domain.com';
-    document.getElementById('copyEmail').addEventListener('click', async (e) => {
+    document.getElementById('copyEmail')?.addEventListener('click', async (e) => {
       try {
         await navigator.clipboard.writeText(EMAIL);
         const el = e.currentTarget; const txt = el.textContent;
@@ -372,43 +407,119 @@
     });
 
     // ===== Form: kirim via email =====
-    document.getElementById('kirimBtn').addEventListener('click', () => {
+    document.getElementById('kirimBtn')?.addEventListener('click', () => {
       const nama = document.getElementById('nama').value.trim();
       const email = document.getElementById('email').value.trim();
       const pesan = document.getElementById('pesan').value.trim();
-      const body = encodeURIComponent(`Hello,
-
-Name: ${nama}
-Email: ${email}
-
-${pesan}`);
+      const body = encodeURIComponent(`Hello,\n\nName: ${nama}\nEmail: ${email}\n\n${pesan}`);
       window.location.href = `mailto:${EMAIL}?subject=Contact%20from%20Website&body=${body}`;
     });
-    document.getElementById('resetBtn').addEventListener('click', () => {
+    document.getElementById('resetBtn')?.addEventListener('click', () => {
       document.getElementById('nama').value = '';
       document.getElementById('email').value = '';
       document.getElementById('pesan').value = '';
     });
 
-    // ===== Filter proyek =====
+    // ===== Slider (arrows) + Filter logic =====
     const filters = document.querySelectorAll('.filter');
-    const cards = document.querySelectorAll('.project');
+    const allCards = Array.from(document.querySelectorAll('.project'));
+    const prevBtn = document.getElementById('arrowLeft');
+    const nextBtn = document.getElementById('arrowRight');
+    const wrapper = document.querySelector('.projects-wrapper');
+    const emptyState = document.getElementById('emptyState');
+
+    let activeTag = 'all';
+    let startIndex = 0; // first visible card index in filtered list
+
+    const getPerPage = () => {
+      const w = window.innerWidth;
+      if (w >= 1000) return 3; // desktop shows 3
+      if (w >= 640) return 2;  // tablet shows 2
+      return 1;                // mobile shows 1
+    };
+
+    const getFilteredList = () => allCards.filter(c => activeTag === 'all' || c.dataset.tags.includes(activeTag));
+
+    function renderSlider() {
+      const perPage = getPerPage();
+      const list = getFilteredList();
+
+      // hide all
+      allCards.forEach(c => c.style.display = 'none');
+
+      // bounds
+      const maxStart = Math.max(0, list.length - perPage);
+      if (startIndex > maxStart) startIndex = maxStart;
+
+      // show window
+      list.slice(startIndex, startIndex + perPage).forEach(c => c.style.display = 'block');
+
+      // arrows state + visibility
+      prevBtn.disabled = startIndex === 0;
+      nextBtn.disabled = startIndex >= maxStart;
+      const needsNav = list.length > perPage;
+      prevBtn.style.display = needsNav ? 'inline-flex' : 'none';
+      nextBtn.style.display = needsNav ? 'inline-flex' : 'none';
+
+      // empty state
+      emptyState.style.display = list.length ? 'none' : 'block';
+    }
+
+    // filter buttons
     filters.forEach(btn => btn.addEventListener('click', () => {
-      filters.forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-      const f = btn.dataset.filter;
-      cards.forEach(c => {
-        const show = f === 'all' || c.dataset.tags.includes(f);
-        c.style.display = show ? 'block' : 'none';
-      });
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTag = btn.dataset.filter;
+      startIndex = 0; // reset to beginning when tag changes
+      renderSlider();
     }));
-  // ===== Preview modal =====
+
+    // arrow buttons
+    prevBtn.addEventListener('click', () => {
+      if (startIndex > 0) {
+        startIndex -= 1;
+        renderSlider();
+      }
+    });
+    nextBtn.addEventListener('click', () => {
+      const perPage = getPerPage();
+      const listLen = getFilteredList().length;
+      const maxStart = Math.max(0, listLen - perPage);
+      if (startIndex < maxStart) {
+        startIndex += 1;
+        renderSlider();
+      }
+    });
+
+    // recalc on resize (debounced)
+    let rezT;
+    window.addEventListener('resize', () => {
+      clearTimeout(rezT);
+      rezT = setTimeout(renderSlider, 120);
+    });
+
+    // Attach modal preview on entire project card
+    document.querySelectorAll('.project').forEach(card => {
+      const url = card.querySelector('[data-preview-url]')?.dataset.previewUrl || card.dataset.url;
+      if (!url) return;
+      card.addEventListener('click', (e) => {
+        // ignore clicks on links/buttons inside card (if any left)
+        if (e.target.closest('a, button')) return;
+        previewUrlEl.textContent = url;
+        openNewTab.href = url;
+        previewFrame.src = url;
+        previewModal.classList.add('active');
+      });
+    });
+
+    // ===== Preview modal =====
     const previewModal = document.getElementById('previewModal');
     const previewFrame = document.getElementById('previewFrame');
     const previewUrlEl = document.getElementById('previewUrl');
     const openNewTab = document.getElementById('openNewTab');
     const closePreview = () => { previewFrame.src = 'about:blank'; previewModal.classList.remove('active'); };
-    document.getElementById('closePreview').addEventListener('click', closePreview);
-    previewModal.addEventListener('click', (e) => { if (e.target === previewModal) closePreview(); });
+    document.getElementById('closePreview')?.addEventListener('click', closePreview);
+    previewModal?.addEventListener('click', (e) => { if (e.target === previewModal) closePreview(); });
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-preview-url]');
       if (!btn) return;
@@ -418,6 +529,19 @@ ${pesan}`);
       previewFrame.src = url;
       previewModal.classList.add('active');
     });
+
+    // ===== Auto preview thumbnails =====
+    document.querySelectorAll('.thumb[data-autopreview="true"] .thumb-frame').forEach(frame => {
+      const fallback = frame.parentElement.querySelector('.thumb-fallback');
+      frame.addEventListener('load', () => {
+        fallback.style.transition = 'opacity .2s ease';
+        fallback.style.opacity = '0';
+        setTimeout(()=> fallback.style.display = 'none', 220);
+      });
+    });
+
+    // initial render
+    renderSlider();
   </script>
 </body>
 </html>
