@@ -114,6 +114,19 @@
     .project .content { padding:14px; }
     .project .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top: 8px; }
 
+    /* Project small buttons */
+    .btn.sm { padding:6px 10px; border-radius:10px; font-size:.9rem; }
+    .project .actions { display:flex; gap:8px; margin-top:10px; }
+
+    /* Preview Modal */
+    #previewModal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,.6); z-index:100; padding:20px; }
+    #previewModal.active{ display:flex; }
+    .modal-card{ width:min(1000px,95%); background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; }
+    .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border); }
+    .modal-subhead{ padding:6px 14px; font-size:.9rem; color:var(--text-soft); border-bottom:1px dashed var(--border); }
+    .modal-body{ height:70vh; }
+    .modal-body iframe{ width:100%; height:100%; border:0; background:var(--muted); }
+
     /* Contact */
     .contact-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
     @media (max-width: 800px){ .contact-grid{ grid-template-columns: 1fr; } }
@@ -173,11 +186,11 @@
         </div>
         <p>Digital Support & Web Designer focused on EDM: blasting, HTML email layout, image editing, and creating digital assets for campaigns. Experienced at HSBC and cross‑team collaboration; ensures consistent rendering (Outlook, Gmail, mobile) and on‑time execution.</p>
         <div class="hero-actions">
-          <button class="btn" id="copyEmail">📋 Salin Email</button>
+          <button class="btn" id="copyEmail">📋 Copy Email</button>
           <a class="btn" href="mailto:emailmu@domain.com">✉️ Email</a>
           <a class="btn" href="https://wa.me/6281234567890" target="_blank" rel="noopener">📱 WhatsApp</a>
           <a class="btn" href="https://www.linkedin.com/in/budifelt/" target="_blank" rel="noopener">💼 LinkedIn</a>
-          <a class="btn" href="https://github.com/username" target="_blank" rel="noopener">💻 GitHub</a>
+          <a class="btn" href="https://github.com/budifelt" target="_blank" rel="noopener">💻 GitHub</a>
         </div>
       </div>
       <div class="card about">
@@ -245,12 +258,16 @@
         </div>
       </div>
       <div class="grid" id="projects">
-        <article class="project" data-tags="web">
-          <div class="thumb">Thumbnail</div>
+        <article class="project" data-tags="web" data-url="https://budifelt.github.io/beta/">
+          <div class="thumb">Project Beta — budifelt.github.io/beta</div>
           <div class="content">
-            <h3>Landing Page Fintech</h3>
-            <p>Increased sign‑ups by 22% via UX & performance optimization.</p>
-            <div class="tags"><span class="badge">Next.js</span><span class="badge">Vercel</span></div>
+            <h3>Project Beta</h3>
+            <p>EDM helper tools & small utilities.</p>
+            <div class="tags"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JS</span><span class="badge">GitHub Pages</span></div>
+            <div class="actions">
+              <button class="btn sm preview-btn" data-preview-url="https://budifelt.github.io/beta/">🔎 Preview</button>
+              <a class="btn sm" href="https://budifelt.github.io/beta/" target="_blank" rel="noopener">↗ Open</a>
+            </div>
           </div>
         </article>
         <article class="project" data-tags="design">
@@ -310,6 +327,23 @@
     © <span id="year"></span> Budi Indra Ilham. Built with vanilla HTML/CSS/JS. 
   </footer>
 
+  <!-- Live Preview Modal -->
+  <div id="previewModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <strong>Live Preview</strong>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <a id="openNewTab" class="btn sm" target="_blank" rel="noopener">↗ Open in new tab</a>
+          <button id="closePreview" class="btn sm">✖ Close</button>
+        </div>
+      </div>
+      <div class="modal-subhead">Previewing: <span id="previewUrl"></span>. If it doesn’t display here, the site blocks embedding in iframes — please use “Open in new tab”.</div>
+      <div class="modal-body">
+        <iframe id="previewFrame" sandbox="allow-same-origin allow-scripts allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ===== Tema (dark / light) =====
     const themeBtn = document.getElementById('themeBtn');
@@ -367,6 +401,23 @@ ${pesan}`);
         c.style.display = show ? 'block' : 'none';
       });
     }));
+  // ===== Preview modal =====
+    const previewModal = document.getElementById('previewModal');
+    const previewFrame = document.getElementById('previewFrame');
+    const previewUrlEl = document.getElementById('previewUrl');
+    const openNewTab = document.getElementById('openNewTab');
+    const closePreview = () => { previewFrame.src = 'about:blank'; previewModal.classList.remove('active'); };
+    document.getElementById('closePreview').addEventListener('click', closePreview);
+    previewModal.addEventListener('click', (e) => { if (e.target === previewModal) closePreview(); });
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-preview-url]');
+      if (!btn) return;
+      const url = btn.dataset.previewUrl;
+      previewUrlEl.textContent = url;
+      openNewTab.href = url;
+      previewFrame.src = url;
+      previewModal.classList.add('active');
+    });
   </script>
 </body>
 </html>
