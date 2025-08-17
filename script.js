@@ -150,7 +150,7 @@ document.querySelectorAll('.thumb[data-autopreview="true"] .thumb-frame').forEac
   const triggerOffset = 40;
 
   const setDrop = (dy)=>{ const c = Math.max(0, Math.min(maxDrop(), dy)); inner.style.transform = `translateY(${c}px)`; return c; };
-  const reset = ()=>{ inner.style.transition='transform .22s'; inner.style.transform='translateY(0)'; cord.classList.remove('dragging'); setTimeout(()=> inner.style.transition='', 220); };
+  const reset = ()=>{ inner.style.transition='transform .28s cubic-bezier(.22,1,.36,1)'; inner.style.transform='translateY(0)'; cord.classList.remove('dragging'); setTimeout(()=> inner.style.transition='', 220); };
   const cycleTheme = ()=>{ const cur=getTheme(); const next = cur==='light'?'dark':(cur==='dark'?'cyberpunk':'light'); setTheme(next); };
 
   const move = (y)=>{ const dy = y - startY; setDrop(dy); const headerBottom = header.getBoundingClientRect().bottom; const knobRect = knob.getBoundingClientRect(); crossed = (knobRect.top + 16) > (headerBottom + triggerOffset); };
