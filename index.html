@@ -22,7 +22,7 @@
       --badge: #0ea5e9;
       --shadow: 0 10px 30px rgba(2,6,23,0.06);
     }
-    [data-theme="dark"] {
+    html[data-theme="dark"] {
       --bg: #0b1220;
       --card: #0f172a;
       --text: #e5e7eb;
@@ -33,6 +33,18 @@
       --muted: #0b1220;
       --badge: #22d3ee;
       --shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+    html[data-theme="cyberpunk"] {
+      --bg: #0a0b12;
+      --card: #0f1022;
+      --text: #e6faff;
+      --text-soft: #8bd5ff;
+      --primary: #00f0ff;
+      --primary-weak: #0a1a2a;
+      --border: #1a2b3c;
+      --muted: #0a0c18;
+      --badge: #ff2bd6;
+      --shadow: 0 0 24px rgba(0,240,255,.18), 0 0 42px rgba(255,43,214,.12);
     }
 
     /* Reset */
@@ -45,18 +57,32 @@
       background: radial-gradient(1200px 600px at 20% -10%, var(--primary-weak), transparent), var(--bg);
       line-height: 1.6;
     }
+    /* Cyberpunk background (tanpa sambungan) */
+    html[data-theme="cyberpunk"] body {
+      color: var(--text);
+      background:
+        repeating-linear-gradient(to right, rgba(0,255,255,0.08) 0 1px, transparent 1px 80px),
+        repeating-linear-gradient(to bottom, rgba(255,0,255,0.08) 0 1px, transparent 1px 80px),
+        radial-gradient(800px 400px at 10% -10%, rgba(255,43,214,.18), transparent 70%),
+        radial-gradient(900px 500px at 90% -20%, rgba(0,240,255,.18), transparent 70%),
+        linear-gradient(180deg, #080912, #0a0b12 40%);
+      background-attachment: fixed, fixed, scroll, scroll, scroll;
+      animation: gridShift 22s linear infinite;
+    }
+
     img { max-width: 100%; display: block; }
     a { color: var(--primary); text-decoration: none; }
 
     /* Layout */
     .container { width: min(1100px, 92%); margin: 0 auto; }
     header.nav {
-      position: sticky; top: 0; z-index: 20;
+      position: sticky; top: 0; z-index: 30;
+      display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 14px 0;
       backdrop-filter: saturate(180%) blur(8px);
       background: color-mix(in oklab, var(--bg) 70%, transparent);
       border-bottom: 1px solid var(--border);
     }
-    .nav-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 14px 0; }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .brand { display:flex; align-items:center; gap:12px; font-weight: 700; letter-spacing:.2px; }
     .brand .dot { width:10px; height:10px; border-radius:50%; background: var(--primary); box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary) 20%, transparent); }
     .nav-actions { display:flex; align-items:center; gap:8px; }
@@ -72,27 +98,24 @@
     .hero { display:grid; grid-template-columns: 1.1fr 1fr; gap: 28px; padding: 28px 0 8px; }
     @media (max-width: 900px){ .hero{ grid-template-columns: 1fr; } }
     .card { background: var(--card); border:1px solid var(--border); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
-    .avatar {
-      width: 110px; aspect-ratio:1; border-radius: 50%; overflow:hidden; border: 4px solid var(--primary-weak);
-      box-shadow: 0 12px 30px color-mix(in oklab, var(--primary) 20%, transparent);
-    }
+    html[data-theme="cyberpunk"] .card{ border:1px solid color-mix(in oklab, var(--primary) 40%, var(--border)); box-shadow: 0 0 0 1px rgba(0,240,255,.08), 0 12px 30px rgba(0,0,0,.45), inset 0 0 20px rgba(255,43,214,.06); animation: neonPulse 2.8s ease-in-out infinite; }
+    .avatar { width: 110px; aspect-ratio:1; border-radius: 50%; overflow:hidden; border: 4px solid var(--primary-weak); box-shadow: 0 12px 30px color-mix(in oklab, var(--primary) 20%, transparent); object-fit:cover; }
     .headline { display:flex; align-items:center; gap:18px; margin-bottom: 10px; }
     h1 { font-size: clamp(1.8rem, 3vw, 2.4rem); line-height:1.2; margin: 0; }
+    html[data-theme="cyberpunk"] h1{ position:relative; text-shadow: 0 0 8px rgba(0,240,255,.9), 0 0 16px rgba(255,43,214,.5); }
     .title { color: var(--text-soft); font-weight: 600; }
     .pill { display:inline-flex; align-items:center; gap: 8px; padding:6px 10px; border-radius:999px; background: var(--muted); border:1px dashed var(--border); font-size:.9rem; }
-    .hero-actions { display:flex; flex-wrap: wrap; gap:10px; margin-top: 14px; }
 
     /* Sections */
     section { margin: 26px 0; }
     .sec-title { font-size: 1.2rem; margin:0 0 12px; display:flex; align-items:center; gap:10px; }
     .sec-title .bar { width:10px; height:10px; border-radius:3px; background: var(--badge); box-shadow: 0 0 0 6px color-mix(in oklab, var(--badge) 25%, transparent); }
-
-    /* About */
-    .about p { margin: 0; color: var(--text-soft); }
+    html[data-theme="cyberpunk"] .sec-title .bar{ background: linear-gradient(90deg, var(--badge), var(--primary), var(--badge)); background-size:200% 100%; animation: sweep 3s linear infinite; }
 
     /* Skills */
     .skills { display:flex; flex-wrap:wrap; gap:8px; }
     .badge { background: color-mix(in oklab, var(--badge) 18%, transparent); color: var(--text); border:1px solid color-mix(in oklab, var(--badge) 25%, var(--border)); padding:6px 10px; border-radius: 999px; font-weight:600; }
+    html[data-theme="cyberpunk"] .badge { box-shadow: 0 0 10px rgba(255,43,214,.28) inset; }
 
     /* Timeline */
     .timeline { display:grid; gap:14px; }
@@ -108,11 +131,11 @@
     .filter.active { background: var(--primary); color: white; border-color: color-mix(in oklab, var(--primary) 60%, var(--border)); }
 
     .projects-wrapper { position: relative; margin-top: 6px; }
-    .grid { flex:1; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
+    .grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; }
     @media (max-width: 1000px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
 
-    .project { cursor:pointer; }
+    .project { position:relative; overflow:hidden; border-radius:16px; border:1px solid var(--border); background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 10%, var(--card)), var(--card)); box-shadow: var(--shadow); cursor:pointer; }
     .project:hover{ transform: translateY(-2px); transition: transform .15s ease; }
     .project .thumb { position:relative; aspect-ratio:9/9; background:var(--muted); border-bottom:1px solid var(--border); overflow:hidden; cursor:pointer; }
     .project .thumb .thumb-frame{ position:absolute; inset:0; width:100%; height:100%; border:0; pointer-events:none; }
@@ -121,20 +144,15 @@
     .project .content { padding:14px; }
     .project .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top: 8px; }
 
-    /*/* Slider Arrows overlay di kiri/kanan grid */
-    .slider-arrow {
-      position:absolute; top:30%; transform: translateY(-50%);
-      display:inline-flex; align-items:center; justify-content:center;
-      width:44px; height:44px; border-radius:999px; border:1px solid var(--border);
-      background: color-mix(in oklab, var(--card) 90%, transparent);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(6px) saturate(120%);
-      cursor:pointer; z-index:5;
-    }
-    .slider-arrow.left { left:-8px; }
-    .slider-arrow.right { right:-8px; }
-    .slider-arrow:disabled { opacity:.45; cursor:not-allowed; }
-    @media (max-width: 640px){ .slider-arrow{ width:38px; height:38px; } }
+    /* Slider Arrows overlay */
+    .slider-arrow { position:absolute; top:30%; transform: translateY(-50%); display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:999px; border:1px solid var(--border); background: color-mix(in oklab, var(--card) 92%, transparent); box-shadow: 0 6px 18px rgba(2,6,23,.15); backdrop-filter: blur(8px) saturate(120%); cursor:pointer; z-index:5; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+    .slider-arrow.left { left:-10px; }
+    .slider-arrow.right { right:-10px; }
+    .slider-arrow:hover { transform: translateY(-50%) scale(1.05); box-shadow: 0 10px 24px rgba(2,6,23,.22); border-color: color-mix(in oklab, var(--primary) 35%, var(--border)); }
+    .slider-arrow svg { width:22px; height:22px; }
+    @media (max-width: 640px){ .slider-arrow{ width:40px; height:40px; } .slider-arrow svg{ width:18px; height:18px; } }
+    html[data-theme="cyberpunk"] .slider-arrow{ border-color: color-mix(in oklab, var(--primary) 60%, var(--border)); box-shadow: 0 0 18px rgba(0,240,255,.25), 0 0 32px rgba(255,43,214,.18); color: var(--text); }
+    html[data-theme="cyberpunk"] .slider-arrow:hover{ filter: drop-shadow(0 0 12px rgba(0,240,255,.6)); transform: translateY(-50%) scale(1.06); }
 
     /* Preview Modal */
     #previewModal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,.6); z-index:100; padding:20px; }
@@ -155,25 +173,62 @@
 
     /* Print (untuk PDF) */
     @media print {
-      header.nav, .hero-actions .btn:not(.print), .filters, .pager, .contact-grid, .project .thumb { display:none !important; }
+      header.nav, .hero-actions .btn:not(.print), .filters, .slider-arrow, .contact-grid, .project .thumb, #pullCord { display:none !important; }
       .card, .project { box-shadow: none; }
-      body { background: white; }
+      body { background: white !important; }
       .container { width: 100%; }
     }
-  </style>
 
-  <!-- Structured Data for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Budi Indra Ilham",
-    "jobTitle": "Digital Support",
-    "url": "https://contoh-domainmu.com",
-    "email": "mailto:emailmu@domain.com",
-    "sameAs": ["https://www.linkedin.com/in/budifelt/"]
-  }
-  </script>
+    /* ===== Pull Cord ===== */
+    #pullCord{
+      position: fixed;
+      top: -30px;
+      right: 12px;
+      width: 28px;
+      height: 25vh; /* diminta: 25vh */
+      z-index: 35;
+      overflow: visible;
+      transform-origin: top center;
+      animation: swingIdle 4s ease-in-out infinite;
+    }
+    #pullCord .cord-inner{ position:absolute; inset:0; will-change: transform; }
+    #pullCord .cord-line{
+      position:absolute; top:-70px; left:50%; transform:translateX(-50%);
+      width:7px; height:120%; border-radius:999px;
+      background: repeating-linear-gradient(45deg, #e5cf9f 0 6px, #b8975a 6px 12px);
+      box-shadow: inset 0 0 1px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.15);
+      transform-origin: top center;
+    }
+    #pullCord .cord-knob{
+      position:absolute; left:50%; transform:translate(-50%,0);
+      bottom:0; width:30px; height:30px; border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #d6b36a, #a9802f 70%);
+      border:1px solid rgba(0,0,0,.25);
+      box-shadow:0 8px 20px rgba(0,0,0,.45), inset 0 2px 6px rgba(255,255,255,.25);
+      cursor:grab;
+    }
+    #pullCord .cord-knob:after{
+      content:""; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+      width:10px; height:12px; background:#a9802f; border-radius:10px; box-shadow:inset 0 2px 3px rgba(0,0,0,.25);
+    }
+    #pullCord .cord-knob:active{ cursor:grabbing; }
+    /* Saat ditarik: goyang aktif pada garis */
+    #pullCord.dragging .cord-line{ animation: swing 1.8s ease-in-out infinite; }
+    #pullCord .cord-knob:after{
+      content:""; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+      width:10px; height:12px; background:#a9802f; border-radius:10px; box-shadow:inset 0 2px 3px rgba(0,0,0,.25);
+    }
+    #pullCord .cord-knob:active{ cursor:grabbing; }
+    /* Saat ditarik: goyang aktif */
+    #pullCord.dragging .cord-line{ animation: swing 6.8s ease-in-out infinite; }
+
+    /* Keyframes */
+    @keyframes neonPulse{ 0%,100%{ box-shadow: 0 0 0 1px rgba(0,240,255,.06), 0 12px 30px rgba(0,0,0,.45), inset 0 0 14px rgba(255,43,214,.05);} 50%{ box-shadow: 0 0 0 1px rgba(0,240,255,.14), 0 18px 40px rgba(0,0,0,.5), inset 0 0 26px rgba(255,43,214,.12);} }
+    @keyframes sweep { 0%{ background-position: 0% 50%; } 100%{ background-position: 200% 50%; } }
+    @keyframes gridShift { 0%{ background-position: 0 0,0 0,0 0,0 0,0 0 } 100%{ background-position:-80px 0,0 -80px,0 0,0 0,0 0 } }
+    @keyframes swing{ 0%,100%{ rotate:0deg } 25%{ rotate:1.2deg } 75%{ rotate:-1.2deg } }
+    @keyframes swingIdle{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(1.2deg); } }
+  </style>
 </head>
 <body>
   <!-- NAVBAR -->
@@ -181,19 +236,28 @@
     <div class="container nav-inner">
       <div class="brand"><span class="dot"></span> <span>Profile / CV</span></div>
       <div class="nav-actions">
-        <button class="btn" id="themeBtn" aria-label="Toggle theme">🌓 <span class="hide-sm">Theme</span></button>
         <button class="btn print" onclick="window.print()" aria-label="Print / Save PDF">🖨️ <span class="hide-sm">Print PDF</span></button>
         <a class="btn primary" href="#contact">✉️ <span class="hide-sm">Contact</span></a>
       </div>
     </div>
   </header>
 
+  <!-- Pull Cord (cycle Light → Dark → Cyberpunk) -->
+  <div id="pullCord" aria-label="Switch theme">
+    <div class="cord-inner">
+      <div class="cord-line"></div>
+      <div class="cord-knob" id="cordKnob"></div>
+    </div>
+  </div>
+    <div class="cord-knob" id="cordKnob"></div>
+  </div>
+
   <main class="container">
     <!-- HERO -->
     <section class="hero">
       <div class="card">
         <div class="headline">
-          <img class="avatar" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%232563eb' offset='0%'/><stop stop-color='%230ea5e9' offset='100%'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><text x='50%' y='52%' dominant-baseline='middle' text-anchor='middle' font-family='Segoe UI, Arial' font-size='72' fill='white'>BI</text></svg>" alt="Avatar" />
+          <img class="avatar" src="https://budifelt.github.io/alpha/budi.jpg" alt="Budi Indra Ilham" loading="lazy" />
           <div>
             <h1>Budi Indra Ilham</h1>
             <div class="title">Digital Support · Jakarta, Indonesia</div>
@@ -275,7 +339,6 @@
           <button class="filter" data-filter="data">Data</button>
         </div>
       </div>
-
       <div class="projects-wrapper">
         <div class="grid" id="projects">
           <article class="project" data-tags="web" data-url="https://budifelt.github.io/beta/">
@@ -285,13 +348,11 @@
             </div>
             <div class="content">
               <h3>Project Beta</h3>
-              <p>EDM helper tools & small utilities<br>
-                for helping my works
-              </p>
+              <p>EDM helper tools & small utilities.</p>
               <div class="tags"><span class="badge">HTML</span><span class="badge">CSS</span><span class="badge">JS</span><span class="badge">GitHub Pages</span></div>
             </div>
           </article>
-          <article class="project" data-tags="design">
+          <article class="project" data-tags="design" data-url="https://example.com/design">
             <div class="thumb">Thumbnail</div>
             <div class="content">
               <h3>Design System v2</h3>
@@ -299,7 +360,7 @@
               <div class="tags"><span class="badge">Figma</span><span class="badge">Design Token</span></div>
             </div>
           </article>
-          <article class="project" data-tags="data">
+          <article class="project" data-tags="data" data-url="https://example.com/dashboard">
             <div class="thumb">Thumbnail</div>
             <div class="content">
               <h3>Dashboard Email Campaign</h3>
@@ -307,8 +368,7 @@
               <div class="tags"><span class="badge">SQL</span><span class="badge">Power BI</span></div>
             </div>
           </article>
-          <!-- Tambah 1 untuk test slider -->
-          <article class="project" data-tags="web">
+          <article class="project" data-tags="web" data-url="https://example.com/landing">
             <div class="thumb">Thumbnail</div>
             <div class="content">
               <h3>Landing Page A/B</h3>
@@ -317,14 +377,14 @@
             </div>
           </article>
         </div>
-        <button class="slider-arrow left" id="arrowLeft" aria-label="Previous">◀</button>
-        <button class="slider-arrow right" id="arrowRight" aria-label="Next">▶</button>
+        <button class="slider-arrow left" id="arrowLeft" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="slider-arrow right" id="arrowRight" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
       </div>
-      </div>
-
-      <div id="emptyState" style="display:none; padding:10px; color:var(--text-soft);">
-        No projects for this tag.
-      </div>
+      <div id="emptyState" style="display:none; padding:10px; color:var(--text-soft);">No projects for this tag.</div>
     </section>
 
     <!-- EDUCATION & CERTS -->
@@ -360,9 +420,7 @@
     </section>
   </main>
 
-  <footer>
-    © <span id="year"></span> Budi Indra Ilham. Built with vanilla HTML/CSS/JS. 
-  </footer>
+  <footer>© <span id="year"></span> Budi Indra Ilham. Built with vanilla HTML/CSS/JS.</footer>
 
   <!-- Live Preview Modal -->
   <div id="previewModal" aria-hidden="true">
@@ -382,24 +440,19 @@
   </div>
 
   <script>
-    // ===== Tema (dark / light) =====
-    const themeBtn = document.getElementById('themeBtn');
+    // ===== Theme helpers =====
     const root = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
-    themeBtn.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
+    const getTheme = () => root.getAttribute('data-theme') || 'light';
+    const setTheme = (t) => { root.setAttribute('data-theme', t); localStorage.setItem('theme', t); };
+    const savedTheme = localStorage.getItem('theme'); if (savedTheme) root.setAttribute('data-theme', savedTheme);
+    const nextThemeOf = (cur) => cur === 'light' ? 'dark' : (cur === 'dark' ? 'cyberpunk' : 'light');
 
     // ===== Tahun footer =====
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // ===== Copy email =====
     const EMAIL = 'emailmu@domain.com';
-    document.getElementById('copyEmail')?.addEventListener('click', async (e) => {
+    document.getElementById('copyEmail').addEventListener('click', async (e) => {
       try {
         await navigator.clipboard.writeText(EMAIL);
         const el = e.currentTarget; const txt = el.textContent;
@@ -409,20 +462,20 @@
     });
 
     // ===== Form: kirim via email =====
-    document.getElementById('kirimBtn')?.addEventListener('click', () => {
+    document.getElementById('kirimBtn').addEventListener('click', () => {
       const nama = document.getElementById('nama').value.trim();
       const email = document.getElementById('email').value.trim();
       const pesan = document.getElementById('pesan').value.trim();
       const body = encodeURIComponent(`Hello,\n\nName: ${nama}\nEmail: ${email}\n\n${pesan}`);
       window.location.href = `mailto:${EMAIL}?subject=Contact%20from%20Website&body=${body}`;
     });
-    document.getElementById('resetBtn')?.addEventListener('click', () => {
+    document.getElementById('resetBtn').addEventListener('click', () => {
       document.getElementById('nama').value = '';
       document.getElementById('email').value = '';
       document.getElementById('pesan').value = '';
     });
 
-    // ===== Slider (arrows) + Filter logic =====
+    // ===== Slider (arrows) + Filter =====
     const filters = document.querySelectorAll('.filter');
     const allCards = Array.from(document.querySelectorAll('.project'));
     const prevBtn = document.getElementById('arrowLeft');
@@ -431,119 +484,116 @@
     const emptyState = document.getElementById('emptyState');
 
     let activeTag = 'all';
-    let startIndex = 0; // first visible card index in filtered list
+    let startIndex = 0;
 
-    const getPerPage = () => {
-      const w = window.innerWidth;
-      if (w >= 1000) return 3; // desktop shows 3
-      if (w >= 640) return 2;  // tablet shows 2
-      return 1;                // mobile shows 1
-    };
+    const getPerPage = () => window.innerWidth>=1000 ? 3 : (window.innerWidth>=640 ? 2 : 1);
+    const getFilteredList = () => allCards.filter(c => activeTag==='all' || c.dataset.tags.includes(activeTag));
 
-    const getFilteredList = () => allCards.filter(c => activeTag === 'all' || c.dataset.tags.includes(activeTag));
-
-    function renderSlider() {
-      const perPage = getPerPage();
-      const list = getFilteredList();
-
-      // hide all
-      allCards.forEach(c => c.style.display = 'none');
-
-      // bounds
-      const maxStart = Math.max(0, list.length - perPage);
-      if (startIndex > maxStart) startIndex = maxStart;
-
-      // show window
-      list.slice(startIndex, startIndex + perPage).forEach(c => c.style.display = 'block');
-
-      // arrows state + visibility
-      prevBtn.disabled = startIndex === 0;
-      nextBtn.disabled = startIndex >= maxStart;
-      const needsNav = list.length > perPage;
-      prevBtn.style.display = needsNav ? 'inline-flex' : 'none';
-      nextBtn.style.display = needsNav ? 'inline-flex' : 'none';
-
-      // empty state
-      emptyState.style.display = list.length ? 'none' : 'block';
+    function renderSlider(){
+      const perPage=getPerPage(), list=getFilteredList();
+      allCards.forEach(c=> c.style.display='none');
+      const maxStart=Math.max(0, list.length - perPage);
+      if(startIndex>maxStart) startIndex=maxStart;
+      list.slice(startIndex, startIndex+perPage).forEach(c=> c.style.display='block');
+      const needsNav=list.length>perPage;
+      prevBtn.style.display=needsNav?'inline-flex':'none';
+      nextBtn.style.display=needsNav?'inline-flex':'none';
+      emptyState.style.display=list.length?'none':'block';
     }
-
-    // filter buttons
     filters.forEach(btn => btn.addEventListener('click', () => {
-      filters.forEach(b => b.classList.remove('active'));
+      filters.forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      activeTag = btn.dataset.filter;
-      startIndex = 0; // reset to beginning when tag changes
+      activeTag=btn.dataset.filter;
+      startIndex=0;
       renderSlider();
     }));
-
-    // arrow buttons
-    prevBtn.addEventListener('click', () => {
-      if (startIndex > 0) {
-        startIndex -= 1;
-        renderSlider();
-      }
+    prevBtn.addEventListener('click', ()=>{
+      const perPage=getPerPage(), len=getFilteredList().length, maxStart=Math.max(0, len-perPage);
+      if(maxStart<=0) return;
+      startIndex=(startIndex - 1 + (maxStart + 1)) % (maxStart + 1);
+      renderSlider();
     });
-    nextBtn.addEventListener('click', () => {
-      const perPage = getPerPage();
-      const listLen = getFilteredList().length;
-      const maxStart = Math.max(0, listLen - perPage);
-      if (startIndex < maxStart) {
-        startIndex += 1;
-        renderSlider();
-      }
+    nextBtn.addEventListener('click', ()=>{
+      const perPage=getPerPage(), len=getFilteredList().length, maxStart=Math.max(0, len-perPage);
+      if(maxStart<=0) return;
+      startIndex=(startIndex + 1) % (maxStart + 1);
+      renderSlider();
     });
-
-    // recalc on resize (debounced)
-    let rezT;
-    window.addEventListener('resize', () => {
-      clearTimeout(rezT);
-      rezT = setTimeout(renderSlider, 120);
-    });
-
-    // Attach modal preview on entire project card
-    document.querySelectorAll('.project').forEach(card => {
-      const url = card.querySelector('[data-preview-url]')?.dataset.previewUrl || card.dataset.url;
-      if (!url) return;
-      card.addEventListener('click', (e) => {
-        // ignore clicks on links/buttons inside card (if any left)
-        if (e.target.closest('a, button')) return;
-        previewUrlEl.textContent = url;
-        openNewTab.href = url;
-        previewFrame.src = url;
-        previewModal.classList.add('active');
-      });
-    });
-
-    // ===== Preview modal =====
-    const previewModal = document.getElementById('previewModal');
-    const previewFrame = document.getElementById('previewFrame');
-    const previewUrlEl = document.getElementById('previewUrl');
-    const openNewTab = document.getElementById('openNewTab');
-    const closePreview = () => { previewFrame.src = 'about:blank'; previewModal.classList.remove('active'); };
-    document.getElementById('closePreview')?.addEventListener('click', closePreview);
-    previewModal?.addEventListener('click', (e) => { if (e.target === previewModal) closePreview(); });
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-preview-url]');
-      if (!btn) return;
-      const url = btn.dataset.previewUrl;
-      previewUrlEl.textContent = url;
-      openNewTab.href = url;
-      previewFrame.src = url;
-      previewModal.classList.add('active');
-    });
-
-    // ===== Auto preview thumbnails =====
-    document.querySelectorAll('.thumb[data-autopreview="true"] .thumb-frame').forEach(frame => {
-      const fallback = frame.parentElement.querySelector('.thumb-fallback');
-      frame.addEventListener('load', () => {
-        fallback.style.transition = 'opacity .2s ease';
-        fallback.style.opacity = '0';
-        setTimeout(()=> fallback.style.display = 'none', 220);
-      });
-    });
-
-    // initial render
+    document.addEventListener('keydown', e=>{ if(e.key==='ArrowLeft') prevBtn.click(); if(e.key==='ArrowRight') nextBtn.click(); });
+    let touchX=null;
+    wrapper.addEventListener('touchstart', e=>{ touchX=e.touches[0].clientX; }, {passive:true});
+    wrapper.addEventListener('touchend', e=>{
+      if(touchX===null) return;
+      const dx=e.changedTouches[0].clientX - touchX; touchX=null;
+      if(Math.abs(dx)<25) return;
+      dx>0? prevBtn.click() : nextBtn.click();
+    }, {passive:true});
+    window.addEventListener('resize', renderSlider);
     renderSlider();
+
+    // ===== Modal Preview (klik card) =====
+    const previewModal=document.getElementById('previewModal');
+    const previewFrame=document.getElementById('previewFrame');
+    const previewUrlEl=document.getElementById('previewUrl');
+    const openNewTab=document.getElementById('openNewTab');
+    const closePreview=()=>{ previewFrame.src='about:blank'; previewModal.classList.remove('active'); };
+    document.getElementById('closePreview').addEventListener('click', closePreview);
+    previewModal.addEventListener('click', (e)=>{ if(e.target===previewModal) closePreview(); });
+    document.querySelectorAll('.project').forEach(card=>{
+      const url = card.querySelector('[data-preview-url]')?.dataset.previewUrl || card.dataset.url;
+      if(!url) return;
+      card.addEventListener('click', (e)=>{
+        if(e.target.closest('a,button')) return;
+        previewUrlEl.textContent=url; openNewTab.href=url; previewFrame.src=url; previewModal.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.thumb[data-autopreview="true"] .thumb-frame').forEach(frame=>{
+      const fb=frame.parentElement.querySelector('.thumb-fallback');
+      frame.addEventListener('load', ()=>{ fb.style.transition='opacity .2s'; fb.style.opacity='0'; setTimeout(()=> fb.style.display='none', 220); });
+    });
+
+    // ===== Pull-cord: cycle Light → Dark → Cyberpunk (25vh & whole cord moves) =====
+    (function(){
+      const cord = document.getElementById('pullCord');
+      const knob = document.getElementById('cordKnob');
+      const inner = cord.querySelector('.cord-inner');
+      const header = document.querySelector('header.nav');
+      if(!cord || !knob || !inner || !header) return;
+
+      let dragging=false, startY=0, crossed=false;
+
+      function maxDrop(){
+        // batas turunan agar inner tetap dalam area dan terlihat natural
+        const h = Math.max(0, cord.getBoundingClientRect().height - 60);
+        return Math.min(100, h);
+      }
+      const triggerOffset = 40;
+
+      const setDrop = (dy)=>{
+        const c = Math.max(0, Math.min(maxDrop(), dy));
+        inner.style.transform = `translateY(${c}px)`; // tarik seluruh tali + knob bareng
+        return c;
+      };
+      const reset = ()=>{ inner.style.transition='transform .22s'; inner.style.transform='translateY(0)'; cord.classList.remove('dragging'); setTimeout(()=> inner.style.transition='', 220); };
+      const cycleTheme = ()=>{ const cur=getTheme(); const next = cur==='light'?'dark':(cur==='dark'?'cyberpunk':'light'); setTheme(next); };
+
+      const move = (y)=>{
+        const dy = y - startY; setDrop(dy);
+        const headerBottom = header.getBoundingClientRect().bottom;
+        const knobRect = knob.getBoundingClientRect();
+        crossed = (knobRect.top + 16) > (headerBottom + triggerOffset);
+      };
+
+      knob.addEventListener('pointerdown', (e)=>{ dragging=true; startY=e.clientY; cord.classList.add('dragging'); knob.setPointerCapture(e.pointerId); });
+      knob.addEventListener('pointermove', (e)=>{ if(dragging) move(e.clientY); });
+      knob.addEventListener('pointerup',   (e)=>{ dragging=false; knob.releasePointerCapture(e.pointerId); if(crossed) cycleTheme(); crossed=false; reset(); });
+      knob.addEventListener('pointercancel', ()=>{ dragging=false; reset(); });
+
+      // touch
+      knob.addEventListener('touchstart', (e)=>{ dragging=true; startY=e.touches[0].clientY; cord.classList.add('dragging'); }, {passive:true});
+      knob.addEventListener('touchmove',  (e)=>{ if(dragging) move(e.touches[0].clientY); }, {passive:true});
+      knob.addEventListener('touchend',   ()=>{ dragging=false; if(crossed) cycleTheme(); crossed=false; reset(); }, {passive:true});
+    })();
   </script>
 </body>
 </html>
